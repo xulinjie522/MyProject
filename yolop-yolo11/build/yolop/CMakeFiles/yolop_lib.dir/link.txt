@@ -1,0 +1,2 @@
+/usr/bin/ar qc libyolop_lib.a  CMakeFiles/yolop_lib.dir/yolop.cpp.o
+/usr/bin/ranlib libyolop_lib.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libyolo11_lib.a  CMakeFiles/yolo11_lib.dir/src/block.cpp.o CMakeFiles/yolo11_lib.dir/src/calibrator.cpp.o CMakeFiles/yolo11_lib.dir/src/model.cpp.o CMakeFiles/yolo11_lib.dir/src/postprocess.cpp.o CMakeFiles/yolo11_lib.dir/src/postprocess.cu.o CMakeFiles/yolo11_lib.dir/src/preprocess.cu.o
+/usr/bin/ranlib libyolo11_lib.a

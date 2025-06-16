@@ -1,0 +1,3 @@
+/home/nvidia/Desktop/xulinjie/build/CMakeFiles/rebuild_cache.dir
+/home/nvidia/Desktop/xulinjie/build/CMakeFiles/edit_cache.dir
+/home/nvidia/Desktop/xulinjie/build/CMakeFiles/yolo.dir

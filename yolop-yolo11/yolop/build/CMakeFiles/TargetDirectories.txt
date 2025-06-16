@@ -1,0 +1,4 @@
+/home/nvidia/tensorrtx/tensorrtx/yolop/build/CMakeFiles/rebuild_cache.dir
+/home/nvidia/tensorrtx/tensorrtx/yolop/build/CMakeFiles/edit_cache.dir
+/home/nvidia/tensorrtx/tensorrtx/yolop/build/CMakeFiles/yolop.dir
+/home/nvidia/tensorrtx/tensorrtx/yolop/build/CMakeFiles/myplugins.dir
