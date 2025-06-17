@@ -6,9 +6,9 @@
 3. CUDA 11.4
 ## how to use
 1. build yolop-yolo11
-'<cd yolop-yolo11
+`<cd yolop-yolo11
    mkdir build && cd build
    cmake ..
-   make>'
+   make>`
 2. run
-'<./multi-model >'
+`<./multi-model >`
