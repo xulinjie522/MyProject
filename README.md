@@ -16,3 +16,9 @@
 ```
    ./multi-model
 ```
+## Acknowledgments
+This project incorporates code from the following third-party source:
+- **Source**: [WangXinyu/original-repo](https://github.com/WangXinyu/original-repo)
+- **License**: MIT License
+- **Copyright**: © 2019-2020 Wang Xinyu
+- **Usage**: [Implement multi-task detection of lane lines and targets]
