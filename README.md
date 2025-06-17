@@ -1,7 +1,7 @@
 # TensorRT for Multi-model
 ## notice
 The original code is from [wang-xinyu/tensorrtx](https://github.com/wang-xinyu/tensorrtx)  
-本代码使用TensorRT同时加速yolop和yolo11模型，并部署在Nvidia AGX Orin设备上
+This code utilizes TensorRT to simultaneously accelerate both YOLOP and YOLOv11 models, deploying them on NVIDIA AGX Orin devices.
 ## Test Environment
 1. TensorRT 8.x
 2. Nvidia AGX Orin
