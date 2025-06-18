@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+../udp/include/udp_sender.h
+iostream
+-
+string
+-
+cstring
+-
+arpa/inet.h
+-
+unistd.h
+-
+nlohmann/json.hpp
+../udp/include/nlohmann/json.hpp
+
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/main.cpp
 fstream
 -
@@ -27,6 +41,8 @@ yolo11/include/utils.h
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include/utils.h
 yolop/yolop.hpp
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/yolop/yolop.hpp
+udp_sender.h
+/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp_sender.h
 
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include/config.h
 

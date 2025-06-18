@@ -8,6 +8,7 @@
 #include "yolo11/include/preprocess.h"
 #include "yolo11/include/utils.h"
 #include "yolop/yolop.hpp"
+#include "udp_sender.h"
 
 using namespace nvinfer1;
 
@@ -99,6 +100,10 @@ void infer(IExecutionContext& context, cudaStream_t& stream, void** buffers, flo
 }
 
 int main(int argc, char** argv) {
+
+    //Create UDPSender
+    UdpSender udp("192.168.10.10", 9090);
+
     cudaSetDevice(kGpuId);  // YOLO11 用 kGpuId，YoloP 用 DEVICE，保持一致
 
     // 1️⃣ 加载 YOLO11 engine
@@ -204,17 +209,6 @@ int main(int argc, char** argv) {
                 yolop_data[idx + 2 * INPUT_H * INPUT_W] = uc_pixel[2];
             }
         }
-        // int i = 0;
-        // for (int row = 0; row < INPUT_H; ++row) {
-        //     float* uc_pixel = pr_img.ptr<float>(row);
-        //     for (int col = 0; col < INPUT_W; ++col) {
-        //         yolop_data[i] = uc_pixel[0];
-        //         yolop_data[i + INPUT_H * INPUT_W] = uc_pixel[1];
-        //         yolop_data[i + 2 * INPUT_H * INPUT_W] = uc_pixel[2];
-        //         uc_pixel += 3;
-        //         ++i;
-        //     }
-        // }
         
         doInferenceCpu(*yolop_context, yolop_stream, yolop_buffers, yolop_data, yolop_prob,
                        yolop_seg_out, yolop_lane_out);
@@ -242,20 +236,14 @@ int main(int argc, char** argv) {
                 pdata += 3;
             }
         }
-        // for (int row = 0; row < img.rows; ++row) {
-        //     uchar* pdata = img.data + row * img.step;
-        //     for (int col = 0; col < img.cols; ++col) {
-        //         int lane_idx = lane_res.at<int>(row, col);
 
-        //         for (int i = 0; i < 3; ++i) {
-        //             if (lane_idx) {
-        //                 if (i != 2)
-        //                     pdata[i] = pdata[i] / 2 + laneColor[lane_idx][i] / 2;
-        //             }
-        //         }
-        //         pdata += 3;
-        //     }
-        // }
+        //udp-sent
+        json j;
+        j["id"] = 100;
+        j["message"] = "Hello from UdpSender class!";
+        j["value"] = 2025.06;
+        udp.send_json(j);
+
         auto end = std::chrono::system_clock::now();
         std::cout << "inference time: "
                   << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;

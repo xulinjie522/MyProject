@@ -79,7 +79,7 @@ set(CUDA_NVCC_FLAGS_DEBUG  ; )
 set(CUDA_NVCC_FLAGS_MINSIZEREL  ; )
 set(CUDA_NVCC_FLAGS_RELWITHDEBINFO  ; )
 set(nvcc_flags -m64;-Dyolo11_plugins_EXPORTS) # list
-set(CUDA_NVCC_INCLUDE_DIRS [==[/usr/local/cuda-11.4/include;/usr/local/cuda/targets/aarch64-linux/include;/usr/include/aarch64-linux-gnu;/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include;/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/plugin;/usr/include/opencv4;/usr/local/cuda-11.4/include]==]) # list (needs to be in lua quotes to address backslashes)
+set(CUDA_NVCC_INCLUDE_DIRS [==[/usr/local/cuda-11.4/include;/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/include;/usr/local/cuda/targets/aarch64-linux/include;/usr/include/aarch64-linux-gnu;/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include;/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/plugin;/usr/include/opencv4;/usr/local/cuda-11.4/include]==]) # list (needs to be in lua quotes to address backslashes)
 string(REPLACE "\\" "/" CUDA_NVCC_INCLUDE_DIRS "${CUDA_NVCC_INCLUDE_DIRS}")
 set(CUDA_NVCC_COMPILE_DEFINITIONS [==[]==]) # list (needs to be in lua quotes see #16510 ).
 set(format_flag "-c") # string

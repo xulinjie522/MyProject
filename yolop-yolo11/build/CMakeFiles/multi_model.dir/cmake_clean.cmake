@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/multi_model.dir/main.cpp.o"
+  "CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.o"
   "multi_model"
   "multi_model.pdb"
 )

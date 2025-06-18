@@ -228,6 +228,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+udp/src/udp_sender.o: udp/src/udp_sender.cpp.o
+
+.PHONY : udp/src/udp_sender.o
+
+# target to build an object file
+udp/src/udp_sender.cpp.o:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.o
+.PHONY : udp/src/udp_sender.cpp.o
+
+udp/src/udp_sender.i: udp/src/udp_sender.cpp.i
+
+.PHONY : udp/src/udp_sender.i
+
+# target to preprocess a source file
+udp/src/udp_sender.cpp.i:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.i
+.PHONY : udp/src/udp_sender.cpp.i
+
+udp/src/udp_sender.s: udp/src/udp_sender.cpp.s
+
+.PHONY : udp/src/udp_sender.s
+
+# target to generate assembly for a file
+udp/src/udp_sender.cpp.s:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.s
+.PHONY : udp/src/udp_sender.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -246,6 +273,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... udp/src/udp_sender.o"
+	@echo "... udp/src/udp_sender.i"
+	@echo "... udp/src/udp_sender.s"
 .PHONY : help
 
 
