@@ -3,9 +3,11 @@
 The original code is from [wang-xinyu/tensorrtx](https://github.com/wang-xinyu/tensorrtx)  
 This code utilizes TensorRT to simultaneously accelerate both YOLOP and YOLOv11 models, deploying them on NVIDIA AGX Orin devices.
 ## Test Environment
-1. TensorRT 8.x
-2. Nvidia AGX Orin
+1. TensorRT 8.5.2
+2. Nvidia AGX Orin(Jetson L4T R35.4.1)
 3. CUDA 11.4
+4. cuDNN 8.6.0
+5. OpenCV 4.5.4
 ## how to use
 1. build yolop-yolo11
 ```
