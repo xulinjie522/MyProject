@@ -6,6 +6,7 @@
 
 // Preprocessing functions
 cv::Rect get_rect(cv::Mat& img, float bbox[4]);
+cv::Rect2d get_rect2d(cv::Mat& img, float bbox[4]);
 
 // Processing functions
 void process(std::vector<Detection>& res, const float* decode_ptr_host,
@@ -44,6 +45,9 @@ void cuda_nms_obb(float* parray, float nms_threshold, int max_objects, cudaStrea
 
 // Drawing functions
 void draw_bbox(cv::Mat& img, std::vector<Detection>& res);
+
+void draw_bbox(cv::Mat& img, std::vector<Detection>& res, std::map<int, std::vector<cv::Point2d>>& allObject,
+                                  const int& camera_id);
 
 void draw_bbox_obb(std::vector<cv::Mat>& img_batch, std::vector<std::vector<Detection>>& res_batch);
 

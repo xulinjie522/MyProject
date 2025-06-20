@@ -219,7 +219,6 @@ void doInferenceCpu(IExecutionContext& context, cudaStream_t& stream, void **buf
     CUDA_CHECK(cudaMemcpyAsync(det_output, buffers[1], OUTPUT_SIZE * sizeof(float), cudaMemcpyDeviceToHost, stream));
     CUDA_CHECK(cudaMemcpyAsync(seg_output, buffers[2], IMG_H * IMG_W * sizeof(int), cudaMemcpyDeviceToHost, stream));
     CUDA_CHECK(cudaMemcpyAsync(lane_output, buffers[3], IMG_H * IMG_W * sizeof(int), cudaMemcpyDeviceToHost, stream));
-    cudaStreamSynchronize(stream);
 }
 
 bool parse_args(int argc, char** argv, std::string& wts, std::string& engine, std::string& img_dir) {

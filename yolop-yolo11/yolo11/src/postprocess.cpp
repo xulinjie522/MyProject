@@ -33,6 +33,41 @@ cv::Rect get_rect(cv::Mat& img, float bbox[4]) {
     return cv::Rect(int(round(l)), int(round(t)), width, height);
 }
 
+cv::Rect2d get_rect2d(cv::Mat& img, float bbox[4]) {
+    double l, r, t, b;
+    double r_w = kInputW / (img.cols * 1.0);
+    double r_h = kInputH / (img.rows * 1.0);
+
+    if (r_h > r_w) {
+        l = bbox[0];
+        r = bbox[2];
+        t = bbox[1] - (kInputH - r_w * img.rows) / 2;
+        b = bbox[3] - (kInputH - r_w * img.rows) / 2;
+        l = l / r_w;
+        r = r / r_w;
+        t = t / r_w;
+        b = b / r_w;
+    } else {
+        l = bbox[0] - (kInputW - r_h * img.cols) / 2;
+        r = bbox[2] - (kInputW - r_h * img.cols) / 2;
+        t = bbox[1];
+        b = bbox[3];
+        l = l / r_h;
+        r = r / r_h;
+        t = t / r_h;
+        b = b / r_h;
+    }
+
+    // 限制边界框在图像范围内
+    l = std::max(0.0, l);
+    t = std::max(0.0, t);
+    double width = std::max(0.0, std::min(r - l, img.cols - l));
+    double height = std::max(0.0, std::min(b - t, img.rows - t));
+
+    // 返回 cv::Rect2d
+    return cv::Rect2d(l, t, width, height);
+}
+
 cv::Rect get_rect_obb(cv::Mat& img, float bbox[4]) {
     float l, r, t, b;
     float r_w = kObbInputW / (img.cols * 1.0);
@@ -187,6 +222,19 @@ void process(std::vector<Detection>& res, const float* decode_ptr_host,
 void draw_bbox(cv::Mat& img, std::vector<Detection>& res) {
     for (size_t j = 0; j < res.size(); j++) {
         cv::Rect r = get_rect(img, res[j].bbox);
+        cv::rectangle(img, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
+        cv::putText(img, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2,
+                    cv::Scalar(0xFF, 0xFF, 0xFF), 2);
+    }
+}
+
+void draw_bbox(cv::Mat& img, std::vector<Detection>& res, 
+                                  std::map<int, std::vector<cv::Point2d>>& allObject, const int& camera_id) {
+    for (size_t j = 0; j < res.size(); j++) {
+        cv::Rect2d r = get_rect2d(img, res[j].bbox);
+        double mid_x = r.x + r.width / 2;
+        double mid_y = r.y + r.height;
+        allObject[camera_id].emplace_back(cv::Point(mid_x, mid_y)); 
         cv::rectangle(img, r, cv::Scalar(0x27, 0xC1, 0x36), 2);
         cv::putText(img, std::to_string((int)res[j].class_id), cv::Point(r.x, r.y - 1), cv::FONT_HERSHEY_PLAIN, 1.2,
                     cv::Scalar(0xFF, 0xFF, 0xFF), 2);

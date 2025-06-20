@@ -18,6 +18,8 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 #udp
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/udp/include)
+#processData
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/processData/include)
 
 # TensorRT: 可根据平台修改
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
@@ -39,6 +41,6 @@ add_subdirectory(yolo11)
 add_subdirectory(yolop)
 
 # 可选：顶层可执行文件 (可省略)
-add_executable(multi_model main.cpp udp/src/udp_sender.cpp)
-target_link_libraries(multi_model PRIVATE yolo11_lib yolop_lib ${OpenCV_LIBS} nvinfer cudart)
+add_executable(multi_model main.cpp udp/src/udp_sender.cpp processData/src/processData.cpp)
+target_link_libraries(multi_model PRIVATE yolo11_lib yolop_lib ${OpenCV_LIBS} nvinfer cudart pthread)
 target_link_libraries(multi_model PRIVATE nlohmann_json::nlohmann_json)

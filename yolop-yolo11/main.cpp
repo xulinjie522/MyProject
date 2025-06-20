@@ -9,8 +9,16 @@
 #include "yolo11/include/utils.h"
 #include "yolop/yolop.hpp"
 #include "udp_sender.h"
+#include <thread>
+#include <mutex>
+#include "processData.h"
 
 using namespace nvinfer1;
+
+//camera_thread
+std::mutex mtx;
+bool stop_flag = false;
+cv::Mat frame;
 
 // YOLO11 配置
 const int kOutputSize = kMaxNumOutputBbox * sizeof(Detection) / sizeof(float) + 1;
@@ -99,10 +107,16 @@ void infer(IExecutionContext& context, cudaStream_t& stream, void** buffers, flo
     CUDA_CHECK(cudaStreamSynchronize(stream));
 }
 
-int main(int argc, char** argv) {
+void camera_thread(cv::VideoCapture& cap){
+    cv::Mat tmp;
+    while(!stop_flag){
+        cap >> tmp;
+        if(tmp.empty()) continue;
+        tmp.copyTo(frame);
+    }
+}
 
-    //Create UDPSender
-    UdpSender udp("192.168.10.10", 9090);
+int main(int argc, char** argv) {
 
     cudaSetDevice(kGpuId);  // YOLO11 用 kGpuId，YoloP 用 DEVICE，保持一致
 
@@ -172,6 +186,16 @@ int main(int argc, char** argv) {
     laneColor.push_back(cv::Vec3b(0, 0, 0));
     laneColor.push_back(cv::Vec3b(0, 0, 255));
 
+    //Create UDPSender
+    UdpSender udp("192.168.10.10", 9090);
+
+    //Save processed lane and object data
+    std::map<int, std::vector<std::vector<cv::Point2d>>> allContours;
+    std::map<int, std::vector<cv::Point2d>> allObject;
+
+    //processData
+    ProcessData processData;
+
     // 3️⃣ 打开摄像头
     cv::VideoCapture cap(0, cv::CAP_GSTREAMER);
     if (!cap.isOpened()) {
@@ -179,24 +203,22 @@ int main(int argc, char** argv) {
         return -1;
     }
 
+    //camera_thread
+    std::thread cap_thread(camera_thread, std::ref(cap));
+
     cv::Mat img;
     while (true) {
         auto start = std::chrono::system_clock::now();
-        cap >> img;
+        frame.copyTo(img);
         if (img.empty()) {
             std::cerr << "No image!" << std::endl;
             continue;
         }
 
-        // ▶ YOLO11 推理
+        // ▶ YOLO11
         cuda_batch_preprocess(img, yolo11_device_buffers[0], kInputW, kInputH, yolo11_stream);
-        infer(*yolo11_context, yolo11_stream, (void**)yolo11_device_buffers, yolo11_output_buffer_host,
-              yolo11_decode_ptr_host, yolo11_decode_ptr_device, yolo11_model_bboxes);
-        std::vector<Detection> yolo11_res;
-        process(yolo11_res, yolo11_decode_ptr_host, bbox_element, img);
-        draw_bbox(img, yolo11_res);
 
-        // ▶ YOLOP 推理
+        // ▶ YOLOP
         cv::Mat pr_img = yolop::preprocess_img(img, INPUT_W, INPUT_H);
         //OpenMP
         #pragma omp parallel for collapse(2)
@@ -210,8 +232,20 @@ int main(int argc, char** argv) {
             }
         }
         
+        //inference
+        infer(*yolo11_context, yolo11_stream, (void**)yolo11_device_buffers, yolo11_output_buffer_host,
+               yolo11_decode_ptr_host, yolo11_decode_ptr_device, yolo11_model_bboxes);
+        
         doInferenceCpu(*yolop_context, yolop_stream, yolop_buffers, yolop_data, yolop_prob,
                        yolop_seg_out, yolop_lane_out);
+
+        cudaStreamSynchronize(yolo11_stream);
+        cudaStreamSynchronize(yolop_stream);
+
+        //postprocess
+        std::vector<Detection> yolo11_res;
+        process(yolo11_res, yolo11_decode_ptr_host, bbox_element, img);
+        draw_bbox(img, yolo11_res, allObject, 0);   
 
         std::vector<Yolo::Detection> yolop_res;
         nms(yolop_res, yolop_prob, CONF_THRESH, NMS_THRESH);
@@ -237,12 +271,13 @@ int main(int argc, char** argv) {
             }
         }
 
+        //processData
+        auto unique_objects = processData.processObjects(allObject, 0.5);
+        auto unique_lanes = processData.processLanes(lane_res, allContours, 0, 0.5);    
+
         //udp-sent
-        json j;
-        j["id"] = 100;
-        j["message"] = "Hello from UdpSender class!";
-        j["value"] = 2025.06;
-        udp.send_json(j);
+        json j = udp.packData(unique_objects, unique_lanes);
+        udp.sendData(j);
 
         auto end = std::chrono::system_clock::now();
         std::cout << "inference time: "
@@ -252,6 +287,9 @@ int main(int argc, char** argv) {
         cv::imshow("Multi-Model", img);
         if (cv::waitKey(1) == 27) break;  // 按 ESC 退出
     }
+
+    stop_flag = true;
+    cap_thread.join();
 
     // 5️⃣ 释放资源
     cudaStreamDestroy(yolo11_stream);

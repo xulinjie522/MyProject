@@ -6,5 +6,5 @@ CXX_FLAGS =  -fopenmp -O3 -DNDEBUG   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/include -I/usr/local/cuda/targets/aarch64-linux/include -isystem /usr/include/opencv4 
+CXX_INCLUDES = -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/processData/include -I/usr/local/cuda/targets/aarch64-linux/include -isystem /usr/include/opencv4 
 

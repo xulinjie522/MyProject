@@ -6,5 +6,5 @@ CUDA_FLAGS = -O3 -DNDEBUG -Xcompiler=-fPIC
 
 CUDA_DEFINES = -Dyolo11_plugins_EXPORTS
 
-CUDA_INCLUDES = -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/plugin -I/usr/include/opencv4 
+CUDA_INCLUDES = -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/processData/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/include -I/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/plugin -I/usr/include/opencv4 
 

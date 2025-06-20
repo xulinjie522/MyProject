@@ -228,6 +228,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+processData/src/processData.o: processData/src/processData.cpp.o
+
+.PHONY : processData/src/processData.o
+
+# target to build an object file
+processData/src/processData.cpp.o:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/processData/src/processData.cpp.o
+.PHONY : processData/src/processData.cpp.o
+
+processData/src/processData.i: processData/src/processData.cpp.i
+
+.PHONY : processData/src/processData.i
+
+# target to preprocess a source file
+processData/src/processData.cpp.i:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/processData/src/processData.cpp.i
+.PHONY : processData/src/processData.cpp.i
+
+processData/src/processData.s: processData/src/processData.cpp.s
+
+.PHONY : processData/src/processData.s
+
+# target to generate assembly for a file
+processData/src/processData.cpp.s:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/processData/src/processData.cpp.s
+.PHONY : processData/src/processData.cpp.s
+
 udp/src/udp_sender.o: udp/src/udp_sender.cpp.o
 
 .PHONY : udp/src/udp_sender.o
@@ -273,6 +300,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... processData/src/processData.o"
+	@echo "... processData/src/processData.i"
+	@echo "... processData/src/processData.s"
 	@echo "... udp/src/udp_sender.o"
 	@echo "... udp/src/udp_sender.i"
 	@echo "... udp/src/udp_sender.s"

@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include "nlohmann/json.hpp"
+#include <opencv2/opencv.hpp>
 
 using json = nlohmann::json;
 
@@ -13,8 +14,15 @@ public:
 
     ~UdpSender();
 
-    bool send_json(const json& j);
+    void sendData(const json& j);
+    json packData(const std::vector<cv::Point2d>& Objects, const std::vector<cv::Vec3f>& Lanes);
+
+private:
+    json prepareData(const std::vector<cv::Point2d>& Objects, const std::vector<cv::Vec3f>& Lanes);
+
+    bool send_json();
 private:
     sockaddr_in dest_addr;
     int sock;
+    json data;
 };
