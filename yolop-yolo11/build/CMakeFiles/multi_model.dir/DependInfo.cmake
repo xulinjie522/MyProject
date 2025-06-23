@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/nvidia/Desktop/xulinjie/yolop-yolo11/MultiCameraSync/src/MultiCameraSync.cpp" "/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles/multi_model.dir/MultiCameraSync/src/MultiCameraSync.cpp.o"
   "/home/nvidia/Desktop/xulinjie/yolop-yolo11/main.cpp" "/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles/multi_model.dir/main.cpp.o"
   "/home/nvidia/Desktop/xulinjie/yolop-yolo11/processData/src/processData.cpp" "/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles/multi_model.dir/processData/src/processData.cpp.o"
   "/home/nvidia/Desktop/xulinjie/yolop-yolo11/udp/src/udp_sender.cpp" "/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.o"
@@ -14,6 +15,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../udp/include"
   "../processData/include"
+  "../MultiCameraSync/include"
   "/usr/local/cuda/targets/aarch64-linux/include"
   "/usr/include/opencv4"
   )

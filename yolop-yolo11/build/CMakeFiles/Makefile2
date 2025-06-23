@@ -120,18 +120,18 @@ yolop/clean: yolop/CMakeFiles/yolop_plugins.dir/clean
 # Target rules for target CMakeFiles/multi_model.dir
 
 # All Build rule for target.
-CMakeFiles/multi_model.dir/all: yolop/CMakeFiles/yolop_lib.dir/all
 CMakeFiles/multi_model.dir/all: yolo11/CMakeFiles/yolo11_lib.dir/all
 CMakeFiles/multi_model.dir/all: yolo11/CMakeFiles/yolo11_plugins.dir/all
+CMakeFiles/multi_model.dir/all: yolop/CMakeFiles/yolop_lib.dir/all
 CMakeFiles/multi_model.dir/all: yolop/CMakeFiles/yolop_plugins.dir/all
 	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/depend
 	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=1,2,3,4 "Built target multi_model"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target multi_model"
 .PHONY : CMakeFiles/multi_model.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/multi_model.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles 18
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles 19
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/multi_model.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles 0
 .PHONY : CMakeFiles/multi_model.dir/rule
@@ -154,7 +154,7 @@ yolo11/CMakeFiles/yolo11_det.dir/all: yolo11/CMakeFiles/yolo11_lib.dir/all
 yolo11/CMakeFiles/yolo11_det.dir/all: yolo11/CMakeFiles/yolo11_plugins.dir/all
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_det.dir/build.make yolo11/CMakeFiles/yolo11_det.dir/depend
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_det.dir/build.make yolo11/CMakeFiles/yolo11_det.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=5,6 "Built target yolo11_det"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=6,7 "Built target yolo11_det"
 .PHONY : yolo11/CMakeFiles/yolo11_det.dir/all
 
 # Build rule for subdir invocation for target.
@@ -181,7 +181,7 @@ yolo11/CMakeFiles/yolo11_det.dir/clean:
 yolo11/CMakeFiles/yolo11_lib.dir/all: yolo11/CMakeFiles/yolo11_plugins.dir/all
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_lib.dir/build.make yolo11/CMakeFiles/yolo11_lib.dir/depend
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_lib.dir/build.make yolo11/CMakeFiles/yolo11_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=7,8,9,10,11,12,13 "Built target yolo11_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=8,9,10,11,12,13,14 "Built target yolo11_lib"
 .PHONY : yolo11/CMakeFiles/yolo11_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -208,7 +208,7 @@ yolo11/CMakeFiles/yolo11_lib.dir/clean:
 yolo11/CMakeFiles/yolo11_plugins.dir/all:
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_plugins.dir/build.make yolo11/CMakeFiles/yolo11_plugins.dir/depend
 	$(MAKE) -f yolo11/CMakeFiles/yolo11_plugins.dir/build.make yolo11/CMakeFiles/yolo11_plugins.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=14,15 "Built target yolo11_plugins"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=15,16 "Built target yolo11_plugins"
 .PHONY : yolo11/CMakeFiles/yolo11_plugins.dir/all
 
 # Build rule for subdir invocation for target.
@@ -236,7 +236,7 @@ yolop/CMakeFiles/yolop_det.dir/all: yolop/CMakeFiles/yolop_lib.dir/all
 yolop/CMakeFiles/yolop_det.dir/all: yolop/CMakeFiles/yolop_plugins.dir/all
 	$(MAKE) -f yolop/CMakeFiles/yolop_det.dir/build.make yolop/CMakeFiles/yolop_det.dir/depend
 	$(MAKE) -f yolop/CMakeFiles/yolop_det.dir/build.make yolop/CMakeFiles/yolop_det.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=16,17 "Built target yolop_det"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=17,18 "Built target yolop_det"
 .PHONY : yolop/CMakeFiles/yolop_det.dir/all
 
 # Build rule for subdir invocation for target.
@@ -263,7 +263,7 @@ yolop/CMakeFiles/yolop_det.dir/clean:
 yolop/CMakeFiles/yolop_lib.dir/all: yolop/CMakeFiles/yolop_plugins.dir/all
 	$(MAKE) -f yolop/CMakeFiles/yolop_lib.dir/build.make yolop/CMakeFiles/yolop_lib.dir/depend
 	$(MAKE) -f yolop/CMakeFiles/yolop_lib.dir/build.make yolop/CMakeFiles/yolop_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=18,19,20 "Built target yolop_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=19,20,21 "Built target yolop_lib"
 .PHONY : yolop/CMakeFiles/yolop_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -290,7 +290,7 @@ yolop/CMakeFiles/yolop_lib.dir/clean:
 yolop/CMakeFiles/yolop_plugins.dir/all:
 	$(MAKE) -f yolop/CMakeFiles/yolop_plugins.dir/build.make yolop/CMakeFiles/yolop_plugins.dir/depend
 	$(MAKE) -f yolop/CMakeFiles/yolop_plugins.dir/build.make yolop/CMakeFiles/yolop_plugins.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=21,22 "Built target yolop_plugins"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nvidia/Desktop/xulinjie/yolop-yolo11/build/CMakeFiles --progress-num=22,23 "Built target yolop_plugins"
 .PHONY : yolop/CMakeFiles/yolop_plugins.dir/all
 
 # Build rule for subdir invocation for target.

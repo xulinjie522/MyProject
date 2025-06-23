@@ -201,6 +201,33 @@ yolop_plugins/fast:
 	$(MAKE) -f yolop/CMakeFiles/yolop_plugins.dir/build.make yolop/CMakeFiles/yolop_plugins.dir/build
 .PHONY : yolop_plugins/fast
 
+MultiCameraSync/src/MultiCameraSync.o: MultiCameraSync/src/MultiCameraSync.cpp.o
+
+.PHONY : MultiCameraSync/src/MultiCameraSync.o
+
+# target to build an object file
+MultiCameraSync/src/MultiCameraSync.cpp.o:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/MultiCameraSync/src/MultiCameraSync.cpp.o
+.PHONY : MultiCameraSync/src/MultiCameraSync.cpp.o
+
+MultiCameraSync/src/MultiCameraSync.i: MultiCameraSync/src/MultiCameraSync.cpp.i
+
+.PHONY : MultiCameraSync/src/MultiCameraSync.i
+
+# target to preprocess a source file
+MultiCameraSync/src/MultiCameraSync.cpp.i:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/MultiCameraSync/src/MultiCameraSync.cpp.i
+.PHONY : MultiCameraSync/src/MultiCameraSync.cpp.i
+
+MultiCameraSync/src/MultiCameraSync.s: MultiCameraSync/src/MultiCameraSync.cpp.s
+
+.PHONY : MultiCameraSync/src/MultiCameraSync.s
+
+# target to generate assembly for a file
+MultiCameraSync/src/MultiCameraSync.cpp.s:
+	$(MAKE) -f CMakeFiles/multi_model.dir/build.make CMakeFiles/multi_model.dir/MultiCameraSync/src/MultiCameraSync.cpp.s
+.PHONY : MultiCameraSync/src/MultiCameraSync.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -297,6 +324,9 @@ help:
 	@echo "... yolop_det"
 	@echo "... yolop_lib"
 	@echo "... yolop_plugins"
+	@echo "... MultiCameraSync/src/MultiCameraSync.o"
+	@echo "... MultiCameraSync/src/MultiCameraSync.i"
+	@echo "... MultiCameraSync/src/MultiCameraSync.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

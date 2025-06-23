@@ -12,13 +12,9 @@
 #include <thread>
 #include <mutex>
 #include "processData.h"
+#include "MultiCameraSync.h"
 
 using namespace nvinfer1;
-
-//camera_thread
-std::mutex mtx;
-bool stop_flag = false;
-cv::Mat frame;
 
 // YOLO11 配置
 const int kOutputSize = kMaxNumOutputBbox * sizeof(Detection) / sizeof(float) + 1;
@@ -107,15 +103,6 @@ void infer(IExecutionContext& context, cudaStream_t& stream, void** buffers, flo
     CUDA_CHECK(cudaStreamSynchronize(stream));
 }
 
-void camera_thread(cv::VideoCapture& cap){
-    cv::Mat tmp;
-    while(!stop_flag){
-        cap >> tmp;
-        if(tmp.empty()) continue;
-        tmp.copyTo(frame);
-    }
-}
-
 int main(int argc, char** argv) {
 
     cudaSetDevice(kGpuId);  // YOLO11 用 kGpuId，YoloP 用 DEVICE，保持一致
@@ -197,99 +184,127 @@ int main(int argc, char** argv) {
     ProcessData processData;
 
     // 3️⃣ 打开摄像头
-    cv::VideoCapture cap(0, cv::CAP_GSTREAMER);
-    if (!cap.isOpened()) {
-        std::cerr << "Cannot open camera!" << std::endl;
+    MultiCameraSync cam_sync(1);
+    try{
+        if(!cam_sync.start()){
+            throw std::runtime_error("Failed to start camera sync!");
+        }
+    }catch(const std::exception& e){
+        std::cerr << "Standard exception: " << e.what() << std::endl;
+        return -1;
+    }catch(...){
+        std::cerr << "Unknow exception occured!" << std::endl;
         return -1;
     }
 
-    //camera_thread
-    std::thread cap_thread(camera_thread, std::ref(cap));
-
+    std::vector<cv::Mat> synced_frames;
+    std::vector<cv::Mat> processed_frames;
     cv::Mat img;
     while (true) {
         auto start = std::chrono::system_clock::now();
-        frame.copyTo(img);
-        if (img.empty()) {
-            std::cerr << "No image!" << std::endl;
-            continue;
-        }
+        if(cam_sync.getSyncedFrames(synced_frames)){
+            processed_frames.clear();
+            for(const auto& frame : synced_frames){
+                frame.copyTo(img);
+                if (img.empty()) {
+                    std::cerr << "No image!" << std::endl;
+                    continue;
+                }
 
-        // ▶ YOLO11
-        cuda_batch_preprocess(img, yolo11_device_buffers[0], kInputW, kInputH, yolo11_stream);
+                // ▶ YOLO11
+                cuda_batch_preprocess(img, yolo11_device_buffers[0], kInputW, kInputH, yolo11_stream);
 
-        // ▶ YOLOP
-        cv::Mat pr_img = yolop::preprocess_img(img, INPUT_W, INPUT_H);
-        //OpenMP
-        #pragma omp parallel for collapse(2)
-        for(int row = 0; row < INPUT_H; ++row){
-            for(int col = 0; col < INPUT_W; ++col){
-                int idx = row * INPUT_W + col;
-                float* uc_pixel = pr_img.ptr<float>(row) + col * 3;
-                yolop_data[idx] = uc_pixel[0];
-                yolop_data[idx + INPUT_H * INPUT_W] = uc_pixel[1];
-                yolop_data[idx + 2 * INPUT_H * INPUT_W] = uc_pixel[2];
-            }
-        }
-        
-        //inference
-        infer(*yolo11_context, yolo11_stream, (void**)yolo11_device_buffers, yolo11_output_buffer_host,
-               yolo11_decode_ptr_host, yolo11_decode_ptr_device, yolo11_model_bboxes);
-        
-        doInferenceCpu(*yolop_context, yolop_stream, yolop_buffers, yolop_data, yolop_prob,
-                       yolop_seg_out, yolop_lane_out);
-
-        cudaStreamSynchronize(yolo11_stream);
-        cudaStreamSynchronize(yolop_stream);
-
-        //postprocess
-        std::vector<Detection> yolo11_res;
-        process(yolo11_res, yolo11_decode_ptr_host, bbox_element, img);
-        draw_bbox(img, yolo11_res, allObject, 0);   
-
-        std::vector<Yolo::Detection> yolop_res;
-        nms(yolop_res, yolop_prob, CONF_THRESH, NMS_THRESH);
-
-        cv::Mat lane_res(img.rows, img.cols, CV_32S);
-        cv::resize(yolop_tmp_lane, lane_res, lane_res.size(), 0, 0, cv::INTER_NEAREST);
-
-        //OpenMP
-        #pragma omp parallel for
-        for(int row = 0; row < img.rows; ++row){
-            uchar* pdata = img.data + row * img.step;
-            for(int col = 0; col < img.cols; ++col){
-                int lane_idx = lane_res.at<int>(row, col);
-
-                for(int i = 0; i < 3; ++i){
-                    if(lane_idx){
-                        if(i != 2) {
-                            pdata[i] = pdata[i] / 2 + laneColor[lane_idx][i] / 2;
-                        }
+                // ▶ YOLOP
+                cv::Mat pr_img = yolop::preprocess_img(img, INPUT_W, INPUT_H);
+                //OpenMP
+                #pragma omp parallel for collapse(2)
+                for(int row = 0; row < INPUT_H; ++row){
+                    for(int col = 0; col < INPUT_W; ++col){
+                        int idx = row * INPUT_W + col;
+                        float* uc_pixel = pr_img.ptr<float>(row) + col * 3;
+                        yolop_data[idx] = uc_pixel[0];
+                        yolop_data[idx + INPUT_H * INPUT_W] = uc_pixel[1];
+                        yolop_data[idx + 2 * INPUT_H * INPUT_W] = uc_pixel[2];
                     }
                 }
-                pdata += 3;
+                
+                //inference
+                infer(*yolo11_context, yolo11_stream, (void**)yolo11_device_buffers, yolo11_output_buffer_host,
+                    yolo11_decode_ptr_host, yolo11_decode_ptr_device, yolo11_model_bboxes);
+                
+                doInferenceCpu(*yolop_context, yolop_stream, yolop_buffers, yolop_data, yolop_prob,
+                            yolop_seg_out, yolop_lane_out);
+
+                cudaStreamSynchronize(yolo11_stream);
+                cudaStreamSynchronize(yolop_stream);
+
+                //postprocess
+                std::vector<Detection> yolo11_res;
+                process(yolo11_res, yolo11_decode_ptr_host, bbox_element, img);
+                draw_bbox(img, yolo11_res, allObject, 0);   
+
+                std::vector<Yolo::Detection> yolop_res;
+                nms(yolop_res, yolop_prob, CONF_THRESH, NMS_THRESH);
+
+                cv::Mat lane_res(img.rows, img.cols, CV_32S);
+                cv::resize(yolop_tmp_lane, lane_res, lane_res.size(), 0, 0, cv::INTER_NEAREST);
+
+                //OpenMP
+                #pragma omp parallel for
+                for(int row = 0; row < img.rows; ++row){
+                    uchar* pdata = img.data + row * img.step;
+                    for(int col = 0; col < img.cols; ++col){
+                        int lane_idx = lane_res.at<int>(row, col);
+
+                        for(int i = 0; i < 3; ++i){
+                            if(lane_idx){
+                                if(i != 2) {
+                                    pdata[i] = pdata[i] / 2 + laneColor[lane_idx][i] / 2;
+                                }
+                            }
+                        }
+                        pdata += 3;
+                    }
+                }
+
+                processed_frames.push_back(img);
+
+                //processData
+                auto unique_objects = processData.processObjects(allObject, 0.5);
+                auto unique_lanes = processData.processLanes(lane_res, allContours, 0, 0.5);    
+
+                //udp-sent
+                json j = udp.packData(unique_objects, unique_lanes);
+                udp.sendData(j);
             }
+            // 4️⃣ 展示
+            cv::Mat display;
+            std::vector<cv::Mat> row1, row2;
+            for(int i = 0; i < 3; ++i){
+                cv::Mat resized;
+                cv::resize(processed_frames[0], resized, cv::Size(640, 340));
+                row1.push_back(resized);
+            }
+            for(int i = 3; i < 6; ++i){
+                cv::Mat resized;
+                cv::resize(processed_frames[0], resized, cv::Size(640, 340));
+                row2.push_back(resized);
+            }
+            cv::Mat row1_cat, row2_cat;
+            cv::hconcat(row1, row1_cat);
+            cv::hconcat(row2, row2_cat);
+            cv::vconcat(row1_cat, row2_cat, display);
+            cv::resize(display, display, cv::Size(1280, 720));
+            cv::imshow("Multi-Model", display);
+            if (cv::waitKey(1) == 27) break;  // 按 ESC 退出
+        }else{
+            std::cerr << "Failed to getSyncedFrames!" << std::endl;
         }
-
-        //processData
-        auto unique_objects = processData.processObjects(allObject, 0.5);
-        auto unique_lanes = processData.processLanes(lane_res, allContours, 0, 0.5);    
-
-        //udp-sent
-        json j = udp.packData(unique_objects, unique_lanes);
-        udp.sendData(j);
 
         auto end = std::chrono::system_clock::now();
         std::cout << "inference time: "
                   << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-
-        // 4️⃣ 展示
-        cv::imshow("Multi-Model", img);
-        if (cv::waitKey(1) == 27) break;  // 按 ESC 退出
     }
-
-    stop_flag = true;
-    cap_thread.join();
 
     // 5️⃣ 释放资源
     cudaStreamDestroy(yolo11_stream);

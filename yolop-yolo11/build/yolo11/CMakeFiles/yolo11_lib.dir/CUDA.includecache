@@ -8,7 +8,21 @@
 
 ../yolo11/include/config.h
 
+../yolo11/include/cuda_utils.h
+cuda_runtime_api.h
+-
+
 ../yolo11/include/postprocess.h
+opencv2/opencv.hpp
+-
+NvInfer.h
+../yolo11/include/NvInfer.h
+types.h
+../yolo11/include/types.h
+
+../yolo11/include/preprocess.h
+map
+-
 opencv2/opencv.hpp
 -
 NvInfer.h
@@ -25,6 +39,12 @@ postprocess.h
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/src/postprocess.h
 types.h
 /home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/src/types.h
+
+/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/src/preprocess.cu
+cuda_utils.h
+/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/src/cuda_utils.h
+preprocess.h
+/home/nvidia/Desktop/xulinjie/yolop-yolo11/yolo11/src/preprocess.h
 
 /usr/include/opencv4/opencv2/calib3d.hpp
 opencv2/core.hpp

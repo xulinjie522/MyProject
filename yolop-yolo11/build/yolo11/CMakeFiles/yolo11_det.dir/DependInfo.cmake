@@ -12,6 +12,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../udp/include"
   "../processData/include"
+  "../MultiCameraSync/include"
   "/usr/local/cuda/targets/aarch64-linux/include"
   "../yolo11/include"
   "../yolo11/plugin"

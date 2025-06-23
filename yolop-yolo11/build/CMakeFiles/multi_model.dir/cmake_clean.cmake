@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/multi_model.dir/MultiCameraSync/src/MultiCameraSync.cpp.o"
   "CMakeFiles/multi_model.dir/main.cpp.o"
   "CMakeFiles/multi_model.dir/processData/src/processData.cpp.o"
   "CMakeFiles/multi_model.dir/udp/src/udp_sender.cpp.o"
