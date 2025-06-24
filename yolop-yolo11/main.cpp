@@ -201,6 +201,8 @@ int main(int argc, char** argv) {
     std::vector<cv::Mat> processed_frames;
     cv::Mat img;
     while (true) {
+        allContours.clear();
+        allObject.clear();
         auto start = std::chrono::system_clock::now();
         if(cam_sync.getSyncedFrames(synced_frames)){
             processed_frames.clear();
@@ -299,6 +301,7 @@ int main(int argc, char** argv) {
             if (cv::waitKey(1) == 27) break;  // 按 ESC 退出
         }else{
             std::cerr << "Failed to getSyncedFrames!" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(5));
         }
 
         auto end = std::chrono::system_clock::now();
