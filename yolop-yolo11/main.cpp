@@ -184,7 +184,7 @@ int main(int argc, char** argv) {
     ProcessData processData;
 
     // 3️⃣ 打开摄像头
-    MultiCameraSync cam_sync(1);
+    MultiCameraSync cam_sync(6);
     try{
         if(!cam_sync.start()){
             throw std::runtime_error("Failed to start camera sync!");
@@ -199,7 +199,7 @@ int main(int argc, char** argv) {
 
     std::vector<cv::Mat> synced_frames;
     std::vector<cv::Mat> processed_frames;
-    cv::Mat img;
+
     while (true) {
         allContours.clear();
         allObject.clear();
@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
         if(cam_sync.getSyncedFrames(synced_frames)){
             processed_frames.clear();
             for(const auto& frame : synced_frames){
-                frame.copyTo(img);
+                cv::Mat img = frame.clone();
                 if (img.empty()) {
                     std::cerr << "No image!" << std::endl;
                     continue;
@@ -284,12 +284,12 @@ int main(int argc, char** argv) {
             std::vector<cv::Mat> row1, row2;
             for(int i = 0; i < 3; ++i){
                 cv::Mat resized;
-                cv::resize(processed_frames[0], resized, cv::Size(640, 340));
+                cv::resize(processed_frames[i], resized, cv::Size(640, 340));
                 row1.push_back(resized);
             }
             for(int i = 3; i < 6; ++i){
                 cv::Mat resized;
-                cv::resize(processed_frames[0], resized, cv::Size(640, 340));
+                cv::resize(processed_frames[i], resized, cv::Size(640, 340));
                 row2.push_back(resized);
             }
             cv::Mat row1_cat, row2_cat;
